@@ -1,6 +1,6 @@
 module github.com/0x2142/frigate-notify
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/OvyFlash/telegram-bot-api v0.0.0-20250501121306-e13ca08617c9
