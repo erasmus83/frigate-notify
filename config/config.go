@@ -145,12 +145,22 @@ func processENV(s, v string) (string, interface{}) {
 				if len(split) != 2 {
 					continue
 				}
-				newHeader := map[string]string{split[0]: split[1]}
+				newHeader := map[string]string{strings.TrimSpace(split[0]): strings.TrimSpace(split[1])}
 				headers = append(headers, newHeader)
 			}
 			return key, headers
 		}
 		return key, strings.Split(v, ";")
 	}
+
+	// Ensure that single header items also get mapped correctly
+	if strings.Contains(strings.ToLower(key), "headers") {
+		var headers []map[string]string
+		split := strings.Split(v, ":")
+		newHeader := map[string]string{strings.TrimSpace(split[0]): strings.TrimSpace(split[1])}
+		headers = append(headers, newHeader)
+		return key, headers
+	}
+
 	return key, v
 }
