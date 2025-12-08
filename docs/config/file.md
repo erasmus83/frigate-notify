@@ -842,6 +842,7 @@ alerts:
     password: test_pass
     recipient: nvr_group@your.domain.tld, someone_else@your.domain.tld
     title:
+    msguuid:
     template:
     ignoressl:
 ```
