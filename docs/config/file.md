@@ -825,6 +825,9 @@ alerts:
 - **ignoressl** (Optional - Default: `false`)
     - Env: `FN_ALERTS__SMTP__IGNORESSL`
     - Set to `true` to allow self-signed certificates
+- **msguuid** (Optional - Default: `false`)
+    - Env: `FN_ALERTS__SMTP__MSGUUID`
+    - Set to `true` to generate message-id from uuid
 
 ```yaml title="Config File Snippet"
 alerts:  
