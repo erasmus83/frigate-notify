@@ -2,7 +2,7 @@
 
 ## [v0.5.4](https://github.com/0x2142/frigate-notify/releases/tag/v0.5.4) - TBD
  - Add option to use UUID as message ID for SMTP alerts
-
+ - Fix issue where headers configured via environment variables may not be parsed corectly
 
 ## [v0.5.3](https://github.com/0x2142/frigate-notify/releases/tag/v0.5.3) - Sep 16 2025
  - Fix issue with MQTT topic parsing
