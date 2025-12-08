@@ -47,7 +47,7 @@ func Load() {
 	// Attempt to load config from file
 	log.Debug().Msgf("Loading config from file: %v", ConfigFile)
 	if err := k.Load(file.Provider(ConfigFile), yaml.Parser()); err != nil {
-		log.Warn().Msg("Unable to load config from file")
+		log.Warn().Err(err).Msg("Unable to load config from file")
 	}
 
 	// Attempt to load config from env var
