@@ -39,12 +39,9 @@ func SendGotifyPush(event models.Event, provider notifMeta) {
 	profile := config.ConfigData.Alerts.Gotify[provider.index]
 	status := &config.Internal.Status.Notifications.Gotify[provider.index]
 
-	var snapshotURL string
-	if config.ConfigData.Frigate.PublicURL != "" {
-		snapshotURL = config.ConfigData.Frigate.PublicURL + "/api/events/" + event.ID + "/snapshot.jpg"
-	} else {
-		snapshotURL = config.ConfigData.Frigate.Server + "/api/events/" + event.ID + "/snapshot.jpg"
-	}
+	snapshotURL := buildSnapshotURL(event).String()
+	snapshotURL = strings.ReplaceAll(snapshotURL, config.ConfigData.Frigate.Server, config.ConfigData.Frigate.PublicURL)
+
 	// Build notification
 	var message string
 	if profile.Template != "" {
