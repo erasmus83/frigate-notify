@@ -1,6 +1,6 @@
 # Changelog
 
-## [v0.5.4](https://github.com/0x2142/frigate-notify/releases/tag/v0.5.4) - TBD
+## [v0.5.4](https://github.com/0x2142/frigate-notify/releases/tag/v0.5.4) - Jan 13 2026
  - Add option to use UUID as message ID for SMTP alerts
  - Fix issue where Gotify snapshots did not include any configured URL parameters
  - Fix issue where headers configured via environment variables may not be parsed corectly
