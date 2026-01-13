@@ -213,6 +213,7 @@ type SMTP struct {
 	Recipient   string `koanf:"recipient" json:"recipient,omitempty" format:"email" doc:"SMTP recipient" default:""`
 	Thread      string `koanf:"thread" json:"thread" enum:"day,camera" doc:"Specify method of email threading" default:"day"`
 	Insecure    bool   `koanf:"ignoressl" enum:"true,false" json:"ignoressl,omitempty" default:"false"`
+	MsgUUID     bool   `koanf:"msguuid" json:"msguuid,omitempty" enum:"true,false" doc:"Generate message-id from uuid" default:"false"`
 }
 
 type Telegram struct {

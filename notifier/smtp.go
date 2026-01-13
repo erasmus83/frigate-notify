@@ -2,7 +2,9 @@ package notifier
 
 import (
 	"crypto/tls"
+	"fmt"
 	"io"
+	"os"
 	"strings"
 	"time"
 
@@ -11,6 +13,7 @@ import (
 	"github.com/0x2142/frigate-notify/config"
 	"github.com/0x2142/frigate-notify/models"
 	"github.com/wneessen/go-mail"
+	"github.com/google/uuid"
 )
 
 var threads map[string]string
@@ -55,7 +58,21 @@ func SendSMTP(event models.Event, snapshot io.Reader, provider notifMeta) {
 		title = renderMessage(config.ConfigData.Alerts.General.Title, event, "title", "smtp")
 	}
 	m.Subject(title)
-	m.SetMessageID()
+
+	if profile.MsgUUID {
+		hostname, err := os.Hostname()
+		if err != nil {
+			hostname = "localhost.localdomain"
+		}
+		uuid, err := uuid.NewV7()
+		if err != nil {
+			m.SetMessageID()
+		} else {
+			m.SetMessageIDWithValue(fmt.Sprintf("%s@%s", uuid, hostname))
+		}
+	} else {
+		m.SetMessageID()
+	}
 
 	// Message threading
 	id := m.GetMessageID()

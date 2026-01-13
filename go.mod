@@ -1,13 +1,14 @@
 module github.com/0x2142/frigate-notify
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/OvyFlash/telegram-bot-api v0.0.0-20250501121306-e13ca08617c9
 	github.com/danielgtaylor/huma/v2 v2.32.0
 	github.com/disgoorg/disgo v0.18.15
 	github.com/disgoorg/json v1.2.0
-	github.com/eclipse/paho.mqtt.golang v1.5.0
+	github.com/eclipse/paho.mqtt.golang v1.5.1
+	github.com/google/uuid v1.6.0
 	github.com/gregdel/pushover v1.3.1
 	github.com/knadh/koanf/parsers/json v1.0.0
 	github.com/knadh/koanf/parsers/yaml v1.1.0
@@ -18,8 +19,8 @@ require (
 	github.com/maypok86/otter v1.2.4
 	github.com/rs/zerolog v1.34.0
 	github.com/tidwall/sjson v1.2.5
-	github.com/wneessen/go-mail v0.6.2
-	golang.org/x/text v0.25.0
+	github.com/wneessen/go-mail v0.7.2
+	golang.org/x/text v0.32.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/yaml.v3 v3.0.1
 	maunium.net/go/mautrix v0.23.3
@@ -47,10 +48,10 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	go.mau.fi/util v0.8.6 // indirect
 	go.yaml.in/yaml/v3 v3.0.3 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
+	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sync v0.14.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sync v0.19.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )

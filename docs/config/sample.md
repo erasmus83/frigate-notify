@@ -159,6 +159,7 @@ alerts:
     user:
     password:
     recipient:
+    msguuid:
     thread:
     template:
 

@@ -154,8 +154,7 @@ func SendAlert(events []models.Event) {
 	}
 }
 
-// GetSnapshot downloads a snapshot from Frigate
-func GetSnapshot(event models.Event) io.Reader {
+func buildSnapshotURL(event models.Event) *url.URL {
 	var snapurl *url.URL
 	if config.ConfigData.Alerts.General.SnapHiRes {
 		evtTime := fmt.Sprintf("%v", event.StartTime)
@@ -175,6 +174,12 @@ func GetSnapshot(event models.Event) io.Reader {
 		}
 		snapurl.RawQuery = q.Encode()
 	}
+	return snapurl
+}
+
+// GetSnapshot downloads a snapshot from Frigate
+func GetSnapshot(event models.Event) io.Reader {
+	snapurl := buildSnapshotURL(event)
 
 	var response []byte
 
