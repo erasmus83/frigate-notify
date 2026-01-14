@@ -80,6 +80,11 @@ alerts:
     allow:
     block:
 
+  genai:
+    enabled:
+    attempts:
+    interval:
+
   apprise_api:
     enabled: false
     server:

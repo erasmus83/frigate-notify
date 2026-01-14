@@ -65,6 +65,7 @@ type Alerts struct {
 	Labels       Labels       `koanf:"labels" json:"labels,omitempty" doc:"Allow/Block labels from alerting"`
 	SubLabels    Labels       `koanf:"sublabels" json:"sublabels,omitempty" doc:"Allow/Block sublabels from alerting"`
 	LicensePlate LicensePlate `koanf:"license_plate" json:"license_plate,omitempty" doc:"License plate recognition settings"`
+	GenAI        GenAI        `koanf:"genai" json:"genai,omitempty" doc:"GenAI event description settings"`
 	AppriseAPI   []AppriseAPI `koanf:"apprise_api" json:"apprise_api,omitempty" doc:"Apprise API notification settings"`
 	Discord      []Discord    `koanf:"discord" json:"discord,omitempty" doc:"Discord notification settings"`
 	Gotify       []Gotify     `koanf:"gotify" json:"gotify,omitempty" doc:"Gotify notification settings"`
@@ -97,6 +98,12 @@ type LicensePlate struct {
 	Enabled bool     `koanf:"enabled" json:"enabled,omitempty" enum:"true,false" doc:"Enable waiting for license plate recognition when car & license plate are detected" default:"false"`
 	Allow   []string `koanf:"allow" json:"allow,omitempty" doc:"List of license plates to allow alerts from"`
 	Block   []string `koanf:"block" json:"block,omitempty" doc:"List of license plates to always block"`
+}
+
+type GenAI struct {
+	Enabled  bool `koanf:"enabled" json:"enabled,omitempty" enum:"true,false" doc:"Enable waiting for GenAI event descriptions" default:"false"`
+	Attempts int  `koanf:"attempts" json:"attempts,omitempty" minimum:"1" maximum:"1000" default:"15" doc:"Max number of attempts to retrieve event description"`
+	Interval int  `koanf:"interval" json:"interval,omitempty" minimum:"1" maximum:"1000" default:"2" doc:"Interval between event re-checks"`
 }
 
 type Quiet struct {

@@ -151,6 +151,14 @@ alerts:
     # List of license plates to never generate notifications
     block:
 
+  genai:
+    # Set to `true` to wait for updated event descriptions provided by GenAI integrations
+    enabled:
+    # Max number of attempts to retrieve updated description (Default: 15)
+    attempts:
+    # Interval between attempts, in seconds (Defualt: 2)
+    interval:
+
   apprise_api:
     # Set to true to enable alerting via Discord messages
     enabled: false

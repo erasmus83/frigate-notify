@@ -101,6 +101,10 @@ func processReview(review models.Review) {
 			break
 		}
 
+		if config.ConfigData.Alerts.GenAI.Enabled {
+			waitforDescription(&detection)
+		}
+
 		// Add special link to review page
 		detection.Extra.ReviewLink = config.ConfigData.Frigate.PublicURL + "/review?id=" + review.ID
 

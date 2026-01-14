@@ -47,6 +47,10 @@ func processEvent(event models.Event) {
 		return
 	}
 
+	if config.ConfigData.Alerts.GenAI.Enabled {
+		waitforDescription(&event)
+	}
+
 	// Send alert with snapshot
 	notifier.SendAlert([]models.Event{event})
 }

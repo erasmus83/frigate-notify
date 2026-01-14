@@ -405,6 +405,27 @@ alerts:
      - XYZ
 ```
 
+### GenAI
+
+Include generative AI event descriptions in notifications, if enabled in Frigate.
+
+- **enabled** (Optional - Default: `false`)
+    - Env: `FN_ALERTS__GENAI__ENABLED`
+    - Specify whether to wait for GenAI event descriptions
+    - By default, this will re-check the Frigate for updated information every 2 seconds for up to 30 seconds
+- **attempts** (Optional - Default: `15`)
+    - Max number of attempts while waiting for updated event info
+- **interval** (Optional - Default: `2`)
+    - Interval between attempts to check for updated event info
+
+```yaml title="Config File Snippet"
+alerts:
+  genai:
+    enabled: true
+    attempts: 15
+    interval: 2
+```
+
 ### Apprise API
 
 !!!important

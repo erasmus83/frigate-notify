@@ -561,6 +561,15 @@ func (c *Config) validateLabelFiltering() []string {
 		log.Debug().Msg("No license plates excluded")
 	}
 
+	// Check GenAI defaults
+	log.Debug().Msgf("Wait for GenAI descriptions: %v", c.Alerts.GenAI.Enabled)
+	if c.Alerts.GenAI.Attempts == 0 {
+		c.Alerts.GenAI.Attempts = 15
+	}
+	if c.Alerts.GenAI.Interval == 0 {
+		c.Alerts.GenAI.Interval = 2
+	}
+
 	return labelErrors
 }
 
