@@ -44,6 +44,7 @@ alerts:
     snap_timestamp:
     snap_crop:
     snap_hires:
+    snap_use_preview:
     max_snap_retry:
     notify_once:
     notify_detections:

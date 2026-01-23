@@ -159,6 +159,8 @@ func buildSnapshotURL(event models.Event) *url.URL {
 	if config.ConfigData.Alerts.General.SnapHiRes {
 		evtTime := fmt.Sprintf("%v", event.StartTime)
 		snapurl, _ = url.Parse(config.ConfigData.Frigate.Server + "/api/" + event.Camera + "/recordings/" + evtTime + "/snapshot.jpg")
+	} else if config.ConfigData.Alerts.General.SnapUsePreview {
+		snapurl, _ = url.Parse(config.ConfigData.Frigate.Server + "/api/events/" + event.ID + "/preview.gif")
 	} else {
 		// Add optional snapshot modifiers
 		snapurl, _ = url.Parse(config.ConfigData.Frigate.Server + "/api/events/" + event.ID + "/snapshot.jpg")

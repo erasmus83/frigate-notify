@@ -211,6 +211,11 @@ All alert providers (Discord, Gotify, etc) also support optional filters & the a
         - This means that the snapshot collected may differ from the snapshot Frigate choses to use for the event
         - This may also mean that, depending on the timing of the detection, this snapshot *may* not include the detected object
         - If it is a priority to ensure that snapshots always include the detected object, then it is recommended to leave this option disabled
+- **snap_use_preview** (Optional - Default: `false`)
+    - Env: `FN_ALERTS__GENERAL__SNAP_USE_PREVIEW`
+    - By default, snapshot image is sent as still JPG image
+    - Set this to `true` to send preview GIFs instead
+    - **Note**: If enabled, `snap_bbox`, `snap_timestamp`, `snap_crop`, and `snap_hires` settings have no effect
 - **max_snap_retry** (Optional - Default: `10`)
     - Env: `FN_ALERTS__GENERAL__MAX_SNAP_RETRY`
     - Max number of retry attempts when waiting for snapshot to become available
@@ -515,6 +520,9 @@ alerts:
 ```
 
 ### Gotify
+
+!!!important
+    Gotify does not allow uploading images to notifications, only providing a link to an image. When notifications are sent via Gotify, an embedded imaged link is sent - which means that the device receiving the notification must have access to the image URL.
 
 - **enabled** (Optional - Default: `false`)
     - Env: `FN_ALERTS__GOTIFY__ENABLED`
