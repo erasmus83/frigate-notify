@@ -21,6 +21,7 @@ type Event struct {
 			Label string `json:"label"`
 		} `json:"attributes"`
 		Box                         []float64 `json:"box"`
+		Description                 string    `json:"description"`
 		Region                      []float64 `json:"region"`
 		Score                       float64   `json:"score"`
 		TopScore                    float64   `json:"top_score"`

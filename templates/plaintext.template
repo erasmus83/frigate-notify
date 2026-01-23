@@ -4,8 +4,10 @@ Camera: {{ .Extra.CameraName }}
 {{ if ge (len .Extra.SubLabelList) 1 }}Sublabel(s): {{ .Extra.SubLabelList }} {{ end }}
 {{ if ge (len .Extra.LicensePlateList) 1 }}License Plate(s): {{ .Extra.LicensePlateList }} {{ end }}
 {{ if ge (len .Extra.Audio) 1 }}Audio: {{ .Extra.Audio }} {{ end }}
-{{ if ge (len .Zones) 1 }}Zone(s): {{ .Extra.ZoneList }}
-{{ end }}
+{{ if ge (len .Zones) 1 }}Zone(s): {{ .Extra.ZoneList }}{{ end }}
+{{ if .Data.Description }}
+Description: {{ .Data.Description }} {{ end }}
+
 Links:
 {{if ge .Extra.FrigateMajorVersion 14 }} - Camera: {{ .Extra.PublicURL }}/#{{ .Camera }}{{else}} - Camera: {{ .Extra.PublicURL }}/cameras/{{ .Camera }}{{end}}
 {{if ne .Extra.ReviewLink ""}} - Review Event: {{ .Extra.ReviewLink }}{{ else }}{{ if .HasClip }} - Event Clip: {{ .Extra.EventLink }}{{ end }}{{ end }}

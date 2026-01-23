@@ -303,6 +303,16 @@ func setExtras(events []models.Event) models.Event {
 	key.Extra.SubLabelList = strings.Join(sublabelList, ", ")
 	key.Extra.LicensePlateList = strings.Join(licenseplateList, ", ")
 
+	// Ensure event description is set if any child event contains one
+	if key.Data.Description == "" {
+		for _, event := range events {
+			if event.Data.Description != "" {
+				key.Data.Description = event.Data.Description
+				break
+			}
+		}
+	}
+
 	// MQTT uses CurrentZones, Web API uses Zones
 	// Combine into one object to use regardless of connection method
 	for _, event := range events {

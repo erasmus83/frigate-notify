@@ -167,3 +167,56 @@ func waitforLPR(event *models.Event) models.Event {
 	}
 	return *event
 }
+
+// Recheck Frigate event & wait for updated event description
+func waitforDescription(event *models.Event) models.Event {
+	if event.Data.Description == "" {
+		log.Debug().
+			Str("event_id", event.ID).
+			Msg("Waiting updated event description...")
+		max := config.ConfigData.Alerts.GenAI.Attempts
+		current := 0
+		for current < max {
+			time.Sleep(time.Duration(config.ConfigData.Alerts.GenAI.Interval) * time.Second)
+			current += 1
+
+			log.Debug().
+				Str("event_id", event.ID).
+				Int("max_attempts", max).
+				Int("current_attempts", current).
+				Msg("Re-checking event details")
+
+			url := config.ConfigData.Frigate.Server + "/api/events/" + event.ID
+			response, err := util.HTTPGet(url, config.ConfigData.Frigate.Insecure, "", config.ConfigData.Frigate.Headers...)
+			if err != nil {
+				config.Internal.Status.Health = "frigate webapi unreachable"
+				config.Internal.Status.Frigate.API = "unreachable"
+				log.Error().
+					Err(err).
+					Msgf("Cannot get event from %s", url)
+				return *event
+			}
+			config.Internal.Status.Health = "ok"
+			config.Internal.Status.Frigate.API = "ok"
+
+			json.Unmarshal([]byte(response), &event)
+
+			if event.Data.Description != "" {
+				log.Debug().
+					Str("event_id", event.ID).
+					Msg("Event description updated")
+				return *event
+			} else {
+				log.Debug().
+					Str("event_id", event.ID).
+					Msg("Event description not updated yet")
+				continue
+			}
+		}
+		log.Debug().
+			Str("event_id", event.ID).
+			Msg("No event description yet & out of attempts")
+		return *event
+	}
+	return *event
+}
