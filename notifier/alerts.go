@@ -229,7 +229,8 @@ func GetClip(event models.Event) io.Reader {
 		response, err = util.HTTPGet(clipurl, config.ConfigData.Frigate.Insecure, "", config.ConfigData.Frigate.Headers...)
 		if err != nil {
 			attempts += 1
-			if err.Error() == "404" {
+			// Catch any 4xx error codes indicating clip is not ready yet & try again
+			if strings.HasPrefix(err.Error(), "4") {
 				time.Sleep(2 * time.Second)
 				log.Info().
 					Str("event_id", event.ID).
