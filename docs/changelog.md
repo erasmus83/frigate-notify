@@ -4,6 +4,7 @@
  - Add support for including GenAI descriptions in notifications
  - Add ability to send preview GIFs instead of still JPG images
  - Fix issue with retrieving clips for Telegram notifications
+ - Fix minor formatting issues with Matrix notifications
 
 ## [v0.5.4](https://github.com/0x2142/frigate-notify/releases/tag/v0.5.4) - Jan 13 2026
  - Add option to use UUID as message ID for SMTP alerts

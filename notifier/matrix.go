@@ -5,17 +5,19 @@ import (
 	"crypto/tls"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
+	"github.com/0x2142/frigate-notify/config"
+	"github.com/0x2142/frigate-notify/models"
+	"github.com/k3a/html2text"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/zerolog/log"
 	"maunium.net/go/mautrix"
 	"maunium.net/go/mautrix/crypto/cryptohelper"
+
 	evt "maunium.net/go/mautrix/event"
 	"maunium.net/go/mautrix/id"
-
-	"github.com/0x2142/frigate-notify/config"
-	"github.com/0x2142/frigate-notify/models"
 )
 
 // SendMatrix pushes alert message to Matrix chat via webhook
@@ -28,8 +30,10 @@ func SendMatrix(event models.Event, snapshot io.Reader, provider notifMeta) {
 	// Build notification
 	if profile.Template != "" {
 		message = renderMessage(profile.Template, event, "message", "Matrix")
+		message = strings.ReplaceAll(message, "\n", "<br />")
 	} else {
 		message = renderMessage("html", event, "message", "Matrix")
+		message = strings.ReplaceAll(message, "\n", "")
 	}
 
 	// New matrix client
@@ -116,6 +120,7 @@ func SendMatrix(event models.Event, snapshot io.Reader, provider notifMeta) {
 		MsgType:       evt.MsgText,
 		Format:        "org.matrix.custom.html",
 		FormattedBody: message,
+		Body:          html2text.HTML2Text(message),
 	})
 	if err != nil {
 		log.Warn().
