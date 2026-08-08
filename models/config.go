@@ -91,6 +91,7 @@ type General struct {
 	NotifyDetections bool   `koanf:"notify_detections,omitempty" json:"notify_detections" enum:"true,false" doc:"Enable notifications on detection (For app mode: reviews)" default:"false"`
 	RecheckDelay     int    `koanf:"recheck_delay" json:"recheck_delay,omitempty" default:"0" doc:"Delay before re-checking event details from Frigate"`
 	AudioOnly        string `koanf:"audio_only" json:"audio_only,omitempty" enum:"allow,drop" doc:"Allow/Drop events that only contain audio detections" default:"allow"`
+	GenAIWait        int    `koanf:"genai_wait" json:"genai_wait,omitempty" default:"0" doc:"Maximum seconds to wait for Frigate Generative AI description before sending alert (0 = don't wait)"`
 }
 
 type LicensePlate struct {

@@ -19,6 +19,10 @@ func processReview(review models.Review) {
 		review = recheckReview(review)
 	}
 
+	if config.ConfigData.Alerts.General.GenAIWait > 0 && review.Data.Metadata == nil {
+		review = waitForGenAI(review)
+	}
+
 	config.Internal.Status.LastEvent = time.Now()
 
 	// Convert to human-readable timestamp
@@ -52,6 +56,7 @@ func processReview(review models.Review) {
 			audioEvent.Extra.Audio = strings.Join(review.Data.Audio, ",")
 			audioEvent.Camera = review.Camera
 			audioEvent.Extra.ReviewLink = config.ConfigData.Frigate.PublicURL + "/review?id=" + review.ID
+			applyGenAIMetadata(&audioEvent.Extra, review.Data.Metadata)
 			notifier.SendAlert([]models.Event{audioEvent})
 			return
 		} else {
@@ -104,6 +109,8 @@ func processReview(review models.Review) {
 		// Add special link to review page
 		detection.Extra.ReviewLink = config.ConfigData.Frigate.PublicURL + "/review?id=" + review.ID
 
+		applyGenAIMetadata(&detection.Extra, review.Data.Metadata)
+
 		detections = append(detections, detection)
 	}
 
@@ -154,4 +161,32 @@ func recheckReview(review models.Review) models.Review {
 
 	json.Unmarshal([]byte(response), &review)
 	return review
+}
+
+// applyGenAIMetadata copies Frigate's Generative AI review description onto an event's
+// Extra fields, if available
+func applyGenAIMetadata(extra *models.ExtraFields, metadata *models.ReviewMetadata) {
+	if metadata == nil {
+		return
+	}
+
+	extra.HasGenAI = true
+	extra.GenAITitle = metadata.Title
+	extra.GenAIScene = metadata.Scene
+	extra.GenAIConfidence = fmt.Sprintf("%v%%", int(metadata.Confidence*100))
+	extra.GenAIThreat = genAIThreatLabel(metadata.PotentialThreatLevel)
+	extra.GenAIConcerns = strings.Join(metadata.OtherConcerns, ", ")
+	extra.GenAITime = metadata.Time
+}
+
+// genAIThreatLabel converts Frigate's numeric potential_threat_level into a human-readable label
+func genAIThreatLabel(level int) string {
+	switch level {
+	case 1:
+		return "Potential"
+	case 2:
+		return "Confirmed"
+	default:
+		return "None"
+	}
 }

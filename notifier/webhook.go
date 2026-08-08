@@ -31,6 +31,16 @@ type WebhookPayload struct {
 		Review string `json:"review,omitempty"`
 		Snap   string `json:"snapshot,omitempty"`
 	} `json:"links"`
+	GenAI *GenAIPayload `json:"genai,omitempty"`
+}
+
+type GenAIPayload struct {
+	Title      string `json:"title"`
+	Scene      string `json:"scene"`
+	Confidence string `json:"confidence"`
+	Threat     string `json:"threat_level"`
+	Concerns   string `json:"other_concerns,omitempty"`
+	Time       string `json:"time"`
 }
 
 // SendWebhook sends alert through HTTP POST to target webhook
@@ -81,6 +91,16 @@ func SendWebhook(event models.Event, provider notifMeta) {
 		}
 		if event.Extra.ReviewLink != "" {
 			defaultTemplate.Links.Review = event.Extra.ReviewLink
+		}
+		if event.Extra.HasGenAI {
+			defaultTemplate.GenAI = &GenAIPayload{
+				Title:      event.Extra.GenAITitle,
+				Scene:      event.Extra.GenAIScene,
+				Confidence: event.Extra.GenAIConfidence,
+				Threat:     event.Extra.GenAIThreat,
+				Concerns:   event.Extra.GenAIConcerns,
+				Time:       event.Extra.GenAITime,
+			}
 		}
 		payload, _ = json.Marshal(defaultTemplate)
 		message = string(payload)

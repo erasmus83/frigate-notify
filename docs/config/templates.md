@@ -106,6 +106,13 @@ The list below doesn't contain every possible variable, just a few of the most c
 | .Extra.PublicURL       | Frigate Public URL as specified under `frigate > public_url`                                                             |
 | .Extra.EventLink       | Link directly to an event clip |
 | .Extra.ReviewLink      | Link directly to a review item, if MQTT `mode` is `reviews` |
+| .Extra.HasGenAI        | Reports `true` if a Frigate Generative AI review description is available (requires `alerts > general > genai_wait` to be set) |
+| .Extra.GenAITitle      | Frigate-generated short title for the review, e.g. useful for a custom `title` template |
+| .Extra.GenAIScene      | Frigate-generated scene description |
+| .Extra.GenAIConfidence | Frigate's confidence percentage in its generated description |
+| .Extra.GenAIThreat     | Frigate's potential threat level: `None`, `Potential`, or `Confirmed` |
+| .Extra.GenAIConcerns   | Comma-separated list of other concerns noted by Frigate, if any |
+| .Extra.GenAITime       | Frigate-provided human-readable time of the review |
 
 ## Environment variables
 

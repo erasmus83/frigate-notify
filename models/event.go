@@ -65,4 +65,11 @@ type ExtraFields struct {
 	ReviewLink          string
 	CameraName          string
 	Audio               string
+	HasGenAI            bool
+	GenAITitle          string
+	GenAIScene          string
+	GenAIConfidence     string
+	GenAIThreat         string
+	GenAIConcerns       string
+	GenAITime           string
 }

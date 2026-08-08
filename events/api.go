@@ -111,6 +111,60 @@ func isStale(itemType string, eventTime float64, id string) bool {
 	return false
 }
 
+// waitForGenAI polls Frigate for a review's Generative AI description, up to the
+// configured genai_wait timeout, before returning
+func waitForGenAI(review models.Review) models.Review {
+	max := config.ConfigData.Alerts.General.GenAIWait / 2
+	if max < 1 {
+		max = 1
+	}
+
+	log.Debug().
+		Str("review_id", review.ID).
+		Int("max_wait", config.ConfigData.Alerts.General.GenAIWait).
+		Msg("Waiting for Generative AI description...")
+
+	current := 0
+	for current < max {
+		time.Sleep(2 * time.Second)
+		current += 1
+
+		log.Debug().
+			Str("review_id", review.ID).
+			Int("max_attempts", max).
+			Int("current_attempts", current).
+			Msg("Re-checking review details for Generative AI description")
+
+		url := config.ConfigData.Frigate.Server + "/api/review/" + review.ID
+		response, err := util.HTTPGet(url, config.ConfigData.Frigate.Insecure, "", config.ConfigData.Frigate.Headers...)
+		if err != nil {
+			config.Internal.Status.Health = "frigate webapi unreachable"
+			config.Internal.Status.Frigate.API = "unreachable"
+			log.Error().
+				Err(err).
+				Str("review_id", review.ID).
+				Msgf("Cannot get review from %s", url)
+			return review
+		}
+		config.Internal.Status.Health = "ok"
+		config.Internal.Status.Frigate.API = "ok"
+
+		json.Unmarshal(response, &review)
+
+		if review.Data.Metadata != nil {
+			log.Debug().
+				Str("review_id", review.ID).
+				Msg("Generative AI description received")
+			return review
+		}
+	}
+
+	log.Debug().
+		Str("review_id", review.ID).
+		Msg("No Generative AI description yet & out of attempts")
+	return review
+}
+
 // Recheck Frigate event & wait for license plate recognition data
 func waitforLPR(event *models.Event) models.Event {
 	if event.Label == "car" {

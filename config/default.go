@@ -56,6 +56,7 @@ var DefaultConfig Config = Config{
 			NotifyDetections: false,
 			RecheckDelay:     0,
 			AudioOnly:        "allow",
+			GenAIWait:        0,
 		},
 		Quiet: models.Quiet{
 			Start: "",

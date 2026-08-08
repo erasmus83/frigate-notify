@@ -49,6 +49,7 @@ alerts:
     notify_detections:
     recheck_delay:
     audio_only:
+    genai_wait:
 
   quiet:
     start:
