@@ -17,6 +17,8 @@ updates:
       go-dependencies:
         patterns:
           - "*"
+        exclude-patterns:
+          - "maunium.net/go/mautrix"
         update-types:
           - "minor"
           - "patch"
