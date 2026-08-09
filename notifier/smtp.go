@@ -12,8 +12,8 @@ import (
 
 	"github.com/0x2142/frigate-notify/config"
 	"github.com/0x2142/frigate-notify/models"
-	"github.com/wneessen/go-mail"
 	"github.com/google/uuid"
+	"github.com/wneessen/go-mail"
 )
 
 var threads map[string]string

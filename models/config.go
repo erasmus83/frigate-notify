@@ -104,8 +104,8 @@ type LicensePlate struct {
 }
 
 type Quiet struct {
-	Start string `koanf:"start" json:"start,omitempty" example:"02:30" pattern:"(\d)?\d:\d\d" doc:"Start time for quiet hours" default:""`
-	End   string `koanf:"end" json:"end,omitempty" example:"05:45" pattern:"(\d)?\d:\d\d" doc:"End time for quiet hours" default:""`
+	Start string `koanf:"start" json:"start,omitempty" example:"02:30" pattern:"(\\d)?\\d:\\d\\d" doc:"Start time for quiet hours" default:""`
+	End   string `koanf:"end" json:"end,omitempty" example:"05:45" pattern:"(\\d)?\\d:\\d\\d" doc:"End time for quiet hours" default:""`
 }
 
 type Zones struct {
