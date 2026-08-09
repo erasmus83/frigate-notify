@@ -5,10 +5,45 @@
 
 version: 2
 updates:
-  # Enable version updates for Docker
+  # Go module dependencies
+  - package-ecosystem: "gomod"
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    groups:
+      go-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "deps"
+
+  # GitHub Actions used in the workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "ci"
+
+  # Base image used in the Dockerfile
   - package-ecosystem: "docker"
     directory: "/"
     target-branch: "main"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "monday"
     open-pull-requests-limit: 10
+    commit-message:
+      prefix: "docker"
