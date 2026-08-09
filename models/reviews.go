@@ -18,21 +18,10 @@ type Review struct {
 	Severity  string  `json:"severity"`
 	ThumbPath string  `json:"thumb_path"`
 	Data      struct {
-		Detections []string        `json:"detections"`
-		Objects    []string        `json:"objects"`
-		SubLabels  []string        `json:"sub_labels"`
-		Zones      []string        `json:"zones"`
-		Audio      []string        `json:"audio"`
-		Metadata   *ReviewMetadata `json:"metadata"`
+		Detections []string `json:"detections"`
+		Objects    []string `json:"objects"`
+		SubLabels  []string `json:"sub_labels"`
+		Zones      []string `json:"zones"`
+		Audio      []string `json:"audio"`
 	}
-}
-
-// ReviewMetadata stores Frigate's Generative AI review description, if enabled
-type ReviewMetadata struct {
-	Title                string   `json:"title"`
-	Scene                string   `json:"scene"`
-	Confidence           float64  `json:"confidence"`
-	PotentialThreatLevel int      `json:"potential_threat_level"`
-	OtherConcerns        []string `json:"other_concerns"`
-	Time                 string   `json:"time"`
 }

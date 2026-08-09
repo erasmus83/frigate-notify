@@ -1,8 +1,4 @@
-{{ if .Extra.HasGenAI }}Description: {{ .Extra.GenAIScene }}<br />
-Confidence: {{ .Extra.GenAIConfidence }}<br />
-Threat Level: {{ .Extra.GenAIThreat }}<br />
-{{ if ge (len .Extra.GenAIConcerns) 1 }}Other Concerns: {{ .Extra.GenAIConcerns }}<br />
-{{ end }}{{ end }}Detection at {{ .Extra.FormattedTime }}<br />
+Detection at {{ .Extra.FormattedTime }}<br />
 Camera: {{ .Extra.CameraName }}<br />
 {{ if ge (len .Extra.LabelList) 1 }}Label(s): {{ .Extra.LabelList }}<br />{{ end }}
 {{ if ge (len .Extra.SubLabelList) 1 }}Sublabel(s): {{ .Extra.SubLabelList }}<br />{{ end }}

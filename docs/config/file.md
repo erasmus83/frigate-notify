@@ -237,19 +237,6 @@ All alert providers (Discord, Gotify, etc) also support optional filters & the a
     - Specify what to do with events that only contain audio detection
     - By default, these events will generate notifications
     - Set to `drop` to silently drop these events & not send notifications
-- **genai_wait** (Optional - Default: `0`)
-    - Env: `FN_ALERTS__GENERAL__GENAI_WAIT`
-    - Only used when app `mode` is `reviews`
-    - Maximum time, in seconds, to wait for Frigate's [Generative AI review description](https://docs.frigate.video/configuration/genai) to become available before sending the notification
-    - If set to `0`, notifications are sent immediately & will not include the AI-generated description, even if Frigate eventually produces one
-    - Frigate typically takes 20-40+ seconds to generate a description (it must wait for the review to end & then call out to an AI model), so this should be set comfortably above that - e.g. `45`
-    - When a description becomes available, it's exposed via the `.Extra.GenAITitle`, `.Extra.GenAIScene`, `.Extra.GenAIConfidence`, `.Extra.GenAIThreat`, `.Extra.GenAIConcerns`, and `.Extra.GenAITime` [template variables](./templates.md#available-variables), and is automatically included in the default message body
-    - For example, to also use the AI-generated title as the notification title, falling back to the default title otherwise:
-        ```yaml
-        alerts:
-          general:
-            title: "{{ if .Extra.HasGenAI }}{{ .Extra.GenAITitle }} (GenAI){{ else }}Frigate Alert{{ end }}"
-        ```
 
 ```yaml title="Config File Snippet"
 alerts:
@@ -265,7 +252,6 @@ alerts:
     notify_once:
     notify_detections:
     audio_only:
-    genai_wait:
 ```
 
 ### Quiet Hours
