@@ -73,4 +73,5 @@ type ExtraFields struct {
 	GenAIThreat         string
 	GenAIConcerns       string
 	GenAITime           string
+	GenAIFallback       bool
 }

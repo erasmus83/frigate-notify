@@ -174,6 +174,7 @@ func handleReviewEnd(review models.Review) {
 				Msg("No GenAI description received - Sending fallback alert")
 			for i := range events {
 				events[i].Extra.AlertTTL = config.ConfigData.Alerts.General.GenAIFinalTTL
+				events[i].Extra.GenAIFallback = true
 			}
 			notifier.SendAlert(events)
 		}

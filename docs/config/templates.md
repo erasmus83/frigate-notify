@@ -113,6 +113,7 @@ The list below doesn't contain every possible variable, just a few of the most c
 | .Extra.GenAIThreat     | Frigate's potential threat level: `None`, `Potential`, or `Confirmed` |
 | .Extra.GenAIConcerns   | Comma-separated list of other concerns noted by Frigate, if any |
 | .Extra.GenAITime       | Frigate-provided human-readable time of the review |
+| .Extra.GenAIFallback   | Reports `true` if this is the review-end fallback alert (no GenAI description arrived within `genai_end_delay`) |
 
 ## Environment variables
 

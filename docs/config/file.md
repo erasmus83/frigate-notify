@@ -247,11 +247,12 @@ All alert providers (Discord, Gotify, etc) also support optional filters & the a
         4. If no description arrives, a follow-up alert without the description is instead sent `genai_end_delay` seconds after the review ends, also using `genai_final_ttl`
     - When `false`, behavior is unchanged - every `new`/`update` message may generate its own notification as before, and Frigate's `genai` MQTT message is ignored
     - The description, once available, is exposed via the `.Extra.GenAITitle`, `.Extra.GenAIScene`, `.Extra.GenAIConfidence`, `.Extra.GenAIThreat`, `.Extra.GenAIConcerns`, and `.Extra.GenAITime` [template variables](./templates.md#available-variables), and is automatically included in the default message body
-    - For example, to also use the AI-generated title as the notification title, falling back to the default title otherwise:
+    - `.Extra.GenAIFallback` is `true` specifically on the step 4 fallback alert (review ended, no description ever arrived), so it can be distinguished from both the initial alert and a successful GenAI follow-up
+    - For example, to reflect all three stages in the notification title:
         ```yaml
         alerts:
           general:
-            title: "{{ if .Extra.HasGenAI }}{{ .Extra.GenAITitle }} (GenAI){{ else }}Frigate Alert{{ end }}"
+            title: "{{ if .Extra.HasGenAI }}{{ .Extra.GenAITitle }} (GenAI){{ else if .Extra.GenAIFallback }}Frigate Alert (End){{ else }}Frigate Alert{{ end }}"
         ```
 - **genai_initial_ttl** (Optional - Default: `120`)
     - Env: `FN_ALERTS__GENERAL__GENAI_INITIAL_TTL`
