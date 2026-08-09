@@ -19,6 +19,8 @@ updates:
           - "*"
         exclude-patterns:
           - "maunium.net/go/mautrix"
+          - "github.com/disgoorg/disgo"
+          - "github.com/OvyFlash/telegram-bot-api"
         update-types:
           - "minor"
           - "patch"
