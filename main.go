@@ -105,7 +105,9 @@ func main() {
 
 	// Load & validate config
 	config.ConfigFile = configFile
-	config.Load()
+	if errs := config.Load(); len(errs) > 0 {
+		log.Fatal().Msg("Please fix config errors before restarting app.")
+	}
 
 	notifier.TemplateFiles = NotifTemplates
 

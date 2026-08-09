@@ -26,8 +26,13 @@ func PostReload(ctx context.Context, input *struct{}) (*ReloadOutput, error) {
 	go func() {
 		log.Info().Msg("Received request to reload config")
 		// Re-load from file & trigger reload
+		previous := config.ConfigData
 		config.ConfigData = config.Config{}
-		config.Load()
+		if errs := config.Load(); len(errs) > 0 {
+			log.Error().Msg("Config reload failed - keeping previous configuration active")
+			config.ConfigData = previous
+			return
+		}
 		newconfig := config.ConfigData
 		go reloadCfg(newconfig, true, true)
 	}()
