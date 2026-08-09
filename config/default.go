@@ -56,6 +56,10 @@ var DefaultConfig Config = Config{
 			NotifyDetections: false,
 			RecheckDelay:     0,
 			AudioOnly:        "allow",
+			GenAIEnabled:     false,
+			GenAIInitialTTL:  120,
+			GenAIFinalTTL:    172800,
+			GenAIEndDelay:    60,
 		},
 		Quiet: models.Quiet{
 			Start: "",

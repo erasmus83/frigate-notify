@@ -131,6 +131,8 @@ func main() {
 	// Set up event cache
 	events.InitZoneCache()
 	defer events.CloseZoneCache()
+	events.InitReviewStateCache()
+	defer events.CloseReviewStateCache()
 
 	// Start API server if enabled
 	if config.ConfigData.App.API.Enabled {

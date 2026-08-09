@@ -91,6 +91,10 @@ type General struct {
 	NotifyDetections bool   `koanf:"notify_detections,omitempty" json:"notify_detections" enum:"true,false" doc:"Enable notifications on detection (For app mode: reviews)" default:"false"`
 	RecheckDelay     int    `koanf:"recheck_delay" json:"recheck_delay,omitempty" default:"0" doc:"Delay before re-checking event details from Frigate"`
 	AudioOnly        string `koanf:"audio_only" json:"audio_only,omitempty" enum:"allow,drop" doc:"Allow/Drop events that only contain audio detections" default:"allow"`
+	GenAIEnabled     bool   `koanf:"genai_enabled" json:"genai_enabled,omitempty" enum:"true,false" doc:"Enable multi-stage alerting for Frigate review Generative AI descriptions (mode: reviews, MQTT only)" default:"false"`
+	GenAIInitialTTL  int    `koanf:"genai_initial_ttl" json:"genai_initial_ttl,omitempty" default:"120" doc:"TTL in seconds for the initial alert sent when a review starts"`
+	GenAIFinalTTL    int    `koanf:"genai_final_ttl" json:"genai_final_ttl,omitempty" default:"172800" doc:"TTL in seconds for the follow-up alert (GenAI description, or sent at review end if none arrived)"`
+	GenAIEndDelay    int    `koanf:"genai_end_delay" json:"genai_end_delay,omitempty" default:"60" doc:"Seconds to wait after a review ends before giving up on a GenAI description"`
 }
 
 type LicensePlate struct {

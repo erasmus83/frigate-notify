@@ -113,6 +113,32 @@ func handleMQTTMsg(client mqtt.Client, msg mqtt.Message) {
 		var review models.MQTTReview
 		json.Unmarshal(msg.Payload(), &review)
 
+		if config.ConfigData.Alerts.General.GenAIEnabled {
+			switch review.Type {
+			case "new":
+				log.Debug().
+					Str("review_id", review.After.ID).
+					Msg("New review received")
+				handleReviewNew(review.After.Review)
+			case "update":
+				log.Debug().
+					Str("review_id", review.After.ID).
+					Msg("Review update received")
+				handleReviewUpdate(review.After.Review)
+			case "genai":
+				log.Debug().
+					Str("review_id", review.After.ID).
+					Msg("GenAI description received")
+				handleReviewGenAI(review.After.Review)
+			case "end":
+				log.Debug().
+					Str("review_id", review.After.ID).
+					Msg("Review ended")
+				handleReviewEnd(review.After.Review)
+			}
+			return
+		}
+
 		switch review.Type {
 		case "new":
 			log.Debug().

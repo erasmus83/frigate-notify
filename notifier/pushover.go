@@ -36,13 +36,20 @@ func SendPushoverMessage(event models.Event, snapshot io.Reader, provider notifM
 	} else {
 		title = renderMessage(config.ConfigData.Alerts.General.Title, event, "title", "pushover")
 	}
+	// Use a dynamic per-alert TTL if one was set (e.g. GenAI multi-stage alerting),
+	// otherwise fall back to the profile's static configured TTL
+	ttl := profile.TTL
+	if event.Extra.AlertTTL > 0 {
+		ttl = event.Extra.AlertTTL
+	}
+
 	notif := &pushover.Message{
 		Message:  message,
 		Title:    title,
 		Priority: profile.Priority,
 		Sound:    profile.Sound,
 		HTML:     true,
-		TTL:      time.Duration(profile.TTL) * time.Second,
+		TTL:      time.Duration(ttl) * time.Second,
 	}
 
 	// Add links

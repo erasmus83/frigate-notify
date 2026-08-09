@@ -237,6 +237,37 @@ All alert providers (Discord, Gotify, etc) also support optional filters & the a
     - Specify what to do with events that only contain audio detection
     - By default, these events will generate notifications
     - Set to `drop` to silently drop these events & not send notifications
+- **genai_enabled** (Optional - Default: `false`)
+    - Env: `FN_ALERTS__GENERAL__GENAI_ENABLED`
+    - Only used when app `mode` is `reviews` & connected via MQTT (there's no equivalent for the web API polling method)
+    - Enables multi-stage alerting for Frigate's [Generative AI review description](https://docs.frigate.video/configuration/genai) feature:
+        1. An initial alert is sent immediately when a review starts, using `genai_initial_ttl`
+        2. Any `update` messages for that review are used to keep the pending alert's details current, but do not send another notification
+        3. Once Frigate's AI description arrives, a follow-up alert is sent with the description included, using `genai_final_ttl`
+        4. If no description arrives, a follow-up alert without the description is instead sent `genai_end_delay` seconds after the review ends, also using `genai_final_ttl`
+    - When `false`, behavior is unchanged - every `new`/`update` message may generate its own notification as before, and Frigate's `genai` MQTT message is ignored
+    - The description, once available, is exposed via the `.Extra.GenAITitle`, `.Extra.GenAIScene`, `.Extra.GenAIConfidence`, `.Extra.GenAIThreat`, `.Extra.GenAIConcerns`, and `.Extra.GenAITime` [template variables](./templates.md#available-variables), and is automatically included in the default message body
+    - For example, to also use the AI-generated title as the notification title, falling back to the default title otherwise:
+        ```yaml
+        alerts:
+          general:
+            title: "{{ if .Extra.HasGenAI }}{{ .Extra.GenAITitle }} (GenAI){{ else }}Frigate Alert{{ end }}"
+        ```
+- **genai_initial_ttl** (Optional - Default: `120`)
+    - Env: `FN_ALERTS__GENERAL__GENAI_INITIAL_TTL`
+    - Only used when `genai_enabled` is `true`
+    - TTL, in seconds, applied to the initial alert sent when a review starts
+    - Currently only takes effect on Pushover notifications (via its `ttl` setting); other providers are unaffected
+- **genai_final_ttl** (Optional - Default: `172800`)
+    - Env: `FN_ALERTS__GENERAL__GENAI_FINAL_TTL`
+    - Only used when `genai_enabled` is `true`
+    - TTL, in seconds, applied to the follow-up alert - whether it includes the GenAI description or was sent as a fallback at review end
+    - Currently only takes effect on Pushover notifications (via its `ttl` setting); other providers are unaffected
+- **genai_end_delay** (Optional - Default: `60`)
+    - Env: `FN_ALERTS__GENERAL__GENAI_END_DELAY`
+    - Only used when `genai_enabled` is `true`
+    - Seconds to wait after a review ends before giving up on a GenAI description & sending the fallback follow-up alert
+    - Frigate's description generation time varies - check your own setup's typical timing & set this comfortably above it to avoid the fallback firing before a real description arrives
 
 ```yaml title="Config File Snippet"
 alerts:
@@ -252,6 +283,10 @@ alerts:
     notify_once:
     notify_detections:
     audio_only:
+    genai_enabled:
+    genai_initial_ttl:
+    genai_final_ttl:
+    genai_end_delay:
 ```
 
 ### Quiet Hours

@@ -19,6 +19,19 @@ func processReview(review models.Review) {
 		review = recheckReview(review)
 	}
 
+	detections, ok := buildReviewAlert(review)
+	if !ok {
+		return
+	}
+
+	// Send alert with snapshot
+	notifier.SendAlert(detections)
+}
+
+// buildReviewAlert applies review-level filters and gathers detection details for a review.
+// Returns the events ready to alert on, and whether the review should generate a notification
+// at all.
+func buildReviewAlert(review models.Review) ([]models.Event, bool) {
 	config.Internal.Status.LastEvent = time.Now()
 
 	// Convert to human-readable timestamp
@@ -40,7 +53,7 @@ func processReview(review models.Review) {
 		log.Info().
 			Str("review_id", review.ID).
 			Msg("Review dropped - Event is detection only, not alert")
-		return
+		return nil, false
 	}
 
 	// Check if audio-only event
@@ -52,18 +65,51 @@ func processReview(review models.Review) {
 			audioEvent.Extra.Audio = strings.Join(review.Data.Audio, ",")
 			audioEvent.Camera = review.Camera
 			audioEvent.Extra.ReviewLink = config.ConfigData.Frigate.PublicURL + "/review?id=" + review.ID
-			notifier.SendAlert([]models.Event{audioEvent})
-			return
-		} else {
-			log.Info().
-				Str("review_id", review.ID).
-				Msg("Review dropped - Audio only event")
-			return
+			return []models.Event{audioEvent}, true
 		}
+		log.Info().
+			Str("review_id", review.ID).
+			Msg("Review dropped - Audio only event")
+		return nil, false
 	}
 
 	// Retrieve detailed detection information
+	fetched := fetchDetections(review)
+
 	reviewFiltered := false
+	var detections []models.Event
+	for _, detection := range fetched {
+		// Check that event passes configured filters
+		if !checkEventFilters(detection) {
+			reviewFiltered = true
+			break
+		}
+
+		detections = append(detections, detection)
+	}
+
+	// Check to make sure at least 1 detection passed filters
+	if len(detections) == 0 {
+		log.Info().
+			Str("review_id", review.ID).
+			Msgf("Review dropped - No events eligible for notification")
+		return nil, false
+	}
+
+	// If any detection would be filtered, skip notifying on this review
+	if reviewFiltered {
+		log.Info().
+			Str("review_id", review.ID).
+			Msgf("Review dropped - One or more detections are filtered")
+		return nil, false
+	}
+
+	return detections, true
+}
+
+// fetchDetections retrieves full detection details for every detection ID on a review,
+// with no filtering applied
+func fetchDetections(review models.Review) []models.Event {
 	var detections []models.Event
 	for _, id := range review.Data.Detections {
 		url := fmt.Sprintf("%s/api/events/%s", config.ConfigData.Frigate.Server, id)
@@ -94,37 +140,14 @@ func processReview(review models.Review) {
 			waitforLPR(&detection)
 		}
 
-		// Check that event passes configured filters
 		detection.CurrentZones = detection.Zones
-		if !checkEventFilters(detection) {
-			reviewFiltered = true
-			break
-		}
 
 		// Add special link to review page
 		detection.Extra.ReviewLink = config.ConfigData.Frigate.PublicURL + "/review?id=" + review.ID
 
 		detections = append(detections, detection)
 	}
-
-	// Check to make sure at least 1 detection passed filters
-	if len(detections) == 0 {
-		log.Info().
-			Str("review_id", review.ID).
-			Msgf("Review dropped - No events eligible for notification")
-		return
-	}
-
-	// If any detection would be filtered, skip notifying on this review
-	if reviewFiltered {
-		log.Info().
-			Str("review_id", review.ID).
-			Msgf("Review dropped - One or more detections are filtered")
-		return
-	}
-
-	// Send alert with snapshot
-	notifier.SendAlert(detections)
+	return detections
 }
 
 func recheckReview(review models.Review) models.Review {
@@ -154,4 +177,32 @@ func recheckReview(review models.Review) models.Review {
 
 	json.Unmarshal([]byte(response), &review)
 	return review
+}
+
+// applyGenAIMetadata copies Frigate's Generative AI review description onto an event's
+// Extra fields, if available
+func applyGenAIMetadata(extra *models.ExtraFields, metadata *models.ReviewMetadata) {
+	if metadata == nil {
+		return
+	}
+
+	extra.HasGenAI = true
+	extra.GenAITitle = metadata.Title
+	extra.GenAIScene = metadata.Scene
+	extra.GenAIConfidence = fmt.Sprintf("%v%%", int(metadata.Confidence*100))
+	extra.GenAIThreat = genAIThreatLabel(metadata.PotentialThreatLevel)
+	extra.GenAIConcerns = strings.Join(metadata.OtherConcerns, ", ")
+	extra.GenAITime = metadata.Time
+}
+
+// genAIThreatLabel converts Frigate's numeric potential_threat_level into a human-readable label
+func genAIThreatLabel(level int) string {
+	switch level {
+	case 1:
+		return "Potential"
+	case 2:
+		return "Confirmed"
+	default:
+		return "None"
+	}
 }
