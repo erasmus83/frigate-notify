@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/OvyFlash/telegram-bot-api v0.0.0-20250501121306-e13ca08617c9
 	github.com/danielgtaylor/huma/v2 v2.39.1
-	github.com/disgoorg/disgo v0.18.15
+	github.com/disgoorg/disgo v0.19.6
 	github.com/disgoorg/json v1.2.0
 	github.com/eclipse/paho.mqtt.golang v1.5.1
 	github.com/google/uuid v1.6.0
@@ -28,6 +28,8 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.2.0 // indirect
+	github.com/disgoorg/json/v2 v2.0.0 // indirect
+	github.com/disgoorg/omit v1.0.0 // indirect
 	github.com/disgoorg/snowflake/v2 v2.0.3 // indirect
 	github.com/dolthub/maphash v0.1.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
