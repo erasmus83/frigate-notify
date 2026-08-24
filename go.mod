@@ -20,10 +20,10 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/tidwall/sjson v1.2.5
 	github.com/wneessen/go-mail v0.8.1
-	golang.org/x/text v0.40.0
+	golang.org/x/text v0.41.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/yaml.v3 v3.0.1
-	maunium.net/go/mautrix v0.29.0
+	maunium.net/go/mautrix v0.30.0
 )
 
 require (
@@ -40,16 +40,16 @@ require (
 	github.com/mattn/go-isatty v0.0.23 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
-	github.com/petermattis/goid v0.0.0-20260713124913-97594f28f5ca // indirect
+	github.com/petermattis/goid v0.0.0-20260816044145-ed329add6b1b // indirect
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
-	go.mau.fi/util v0.9.11 // indirect
+	go.mau.fi/util v0.10.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.3 // indirect
-	golang.org/x/crypto v0.54.0 // indirect
-	golang.org/x/exp v0.0.0-20260709172345-9ea1abe57597 // indirect
-	golang.org/x/net v0.57.0 // indirect
+	golang.org/x/crypto v0.55.0 // indirect
+	golang.org/x/exp v0.0.0-20260813180055-c1d0aacb2297 // indirect
+	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
