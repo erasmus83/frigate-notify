@@ -15,12 +15,12 @@ require (
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/structs v1.0.1
 	github.com/knadh/koanf/v2 v2.3.6
-	github.com/mattn/go-sqlite3 v1.14.49
+	github.com/mattn/go-sqlite3 v1.14.50
 	github.com/maypok86/otter v1.2.4
 	github.com/rs/zerolog v1.35.1
 	github.com/tidwall/sjson v1.2.5
 	github.com/wneessen/go-mail v0.8.1
-	golang.org/x/text v0.40.0
+	golang.org/x/text v0.41.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/yaml.v3 v3.0.1
 	maunium.net/go/mautrix v0.29.0
