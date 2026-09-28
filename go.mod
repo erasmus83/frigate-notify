@@ -14,7 +14,7 @@ require (
 	github.com/knadh/koanf/parsers/yaml v1.1.1
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/structs v1.0.1
-	github.com/knadh/koanf/v2 v2.3.6
+	github.com/knadh/koanf/v2 v2.3.7
 	github.com/mattn/go-sqlite3 v1.14.52
 	github.com/maypok86/otter v1.2.4
 	github.com/rs/zerolog v1.35.1
